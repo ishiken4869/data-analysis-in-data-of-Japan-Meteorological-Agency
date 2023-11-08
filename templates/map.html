@@ -1,0 +1,46 @@
+<!--extendsの部分は、base.htmlをベースにテンプレートを組み立てるおまじないです-->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="bg-dark p-2 text-white bg-opacity-75">
+
+    <header>
+        <h1 class="display-4">{{ title }}</h1>
+    </header>
+
+    <ul class="nav justify-content-end">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">気温</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">降水量</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">気圧</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">湿度</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">風速</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">日照時間</a>
+        </li>
+    </ul>
+</div>
+
+<div class="m-4">
+    <h3> 地方:{{ region }} <br> 年:{{ year }} <br> 月:{{ month }}</h3>
+
+    <p> 過去30年間の気象庁の観測データをもとに、仮説検定を実行 </p>
+    <div class="container">
+        <img src="../static/images/japanmap.png" alt="日本地図のマッピング" class="img-fluid">
+    </div>
+
+    <p><a href="/" class="link-light">戻る</a></p>
+</div>
+
+
+{% endblock %}

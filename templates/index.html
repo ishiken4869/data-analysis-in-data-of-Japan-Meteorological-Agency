@@ -1,0 +1,191 @@
+<!--extendsの部分は、base.htmlをベースにテンプレートを組み立てるおまじないです-->
+{% extends "base.html" %}
+{% block content %}
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous">
+</script>
+<script>
+/*    $(function () {
+        //ローディング表示
+        show_loading();
+
+        //5秒後にローディング非表示
+        setTimeout(function () {
+            hide_loading();
+        }, 5000);
+    })
+*/
+
+    //ローディング表示
+    function show_loading() {
+        $('#loading').removeClass('d-none');
+    }
+
+    //ローディング非表示
+    function hide_loading() {
+        $('#loading').addClass('d-none');
+    }
+
+    function move() {
+        window.location.href = 'http://localhost:3000/map'
+
+        // 新規タブで開くとエラーが発生
+        // window.open('http://localhost:3000/map', '_blank', 'noreferrer');
+        $('#loading').removeClass('d-none');
+    }
+</script>
+
+<div id="loading" class="position-absolute top-0 start-0 w-100 h-100 d-none">
+    <div class="text-center position-absolute top-50 start-50 w-100 translate-middle">
+        <div class="spinner-border text-light" role="status" style="width: 5rem; height: 5rem;">
+            <span class="sr-only"></span>
+        </div>
+        <div class="text-light">
+            <p class="h3">Loading...</p>
+        </div>
+    </div>
+</div>
+
+
+<div class="bg-dark p-2 text-white bg-opacity-75">
+
+    <header>
+        <h1 class="display-4">{{ title }}</h1>
+    </header>
+
+    <ul class="nav justify-content-end">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">気温</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">降水量</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">気圧</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">湿度</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">風速</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">日照時間</a>
+        </li>
+    </ul>
+</div>
+
+<div class="m-4">
+    <main>
+        <article>
+            <h3>地方・年・月を選択</h3>
+            <div class="containeer-fluid">
+                <form action="{{ url_for('map') }}" method="POST">
+                    <div class="form-group">
+
+                        <!-- <p><span>都道府県: </span>{{ pref }}</p> -->
+                        <p>
+                            <label>地方</label>
+                            <!-- <input type="text" name="pref" value="{{ pref }}"> -->
+                            <div class="col-md-1">
+                                <select name="region" class="form-select">
+                                    <option value="全国">全国</option>
+                                    <option value="北海道">北海道</option>
+                                    <option value="東北">東北</option>
+                                    <option value="関東">関東</option>
+                                    <option value="中部">中部</option>
+                                    <option value="近畿">近畿</option>
+                                    <option value="中国">中国</option>
+                                    <option value="四国">四国</option>
+                                    <option value="九州">九州</option>
+                                </select>
+                            </div>
+                        </p>
+                    </div>
+
+                    <div class="form-group">
+                        <!-- <p><span>年: </span>{{ year }}</p> -->
+                        <p>
+                            <label>年</label>
+                            <!-- <input type="text" name="year" value="{{ year }}"> -->
+                            <div class="col-md-1">
+                                <select name="year" class="form-select">
+                                    <option value=2023>2023</option>
+                                    <option value=2022>2022</option>
+                                    <option value=2021>2021</option>
+                                    <option value=2020>2020</option>
+                                    <option value=2019>2019</option>
+                                    <option value=2018>2018</option>
+                                    <option value=2017>2017</option>
+                                    <option value=2016>2016</option>
+                                    <option value=2015>2015</option>
+                                    <option value=2014>2014</option>
+                                    <option value=2013>2013</option>
+                                    <option value=2012>2012</option>
+                                    <option value=2011>2011</option>
+                                    <option value=2010>2010</option>
+                                    <option value=2009>2009</option>
+                                    <option value=2008>2008</option>
+                                    <option value=2007>2007</option>
+                                    <option value=2006>2006</option>
+                                    <option value=2005>2005</option>
+                                    <option value=2004>2004</option>
+                                    <option value=2003>2003</option>
+                                    <option value=2002>2002</option>
+                                    <option value=2001>2001</option>
+                                    <option value=2000>2000</option>
+                                </select>
+                            </div>
+                        </p>
+                    </div>
+
+                    <div class="form-group">
+                        <!-- <p><span>月: </span>{{ month }}</p> -->
+                        <p>
+                            <label>月</label>
+                            <div class="col-md-1">
+                                <select name="month" class="form-select">
+                                    <option value=1>1</option>
+                                    <option value=2>2</option>
+                                    <option value=3>3</option>
+                                    <option value=4>4</option>
+                                    <option value=5>5</option>
+                                    <option value=6>6</option>
+                                    <option value=7>7</option>
+                                    <option value=8>8</option>
+                                    <option value=9>9</option>
+                                    <option value=10>10</option>
+                                    <option value=11>11</option>
+                                    <option value=12>12</option>
+                                </select>
+                            </div>
+                        </p>
+                    </div>
+                    <p>
+                        <button type="submit" class="btn btn-outline-primary" onclick="move();">送信</button>
+                        <!-- <button type="submit" class="btn btn-outline-primary" onclick="location.href='http://localhost:3000/map'">送信</button> -->
+                        <!--<button type="submit" class="btn btn-primary" onclick="location.href='http://localhost:3000/map'" disabled>送信
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="sr-only">Loading...</span>
+                        </button>-->
+                    </p>
+                </form>
+            </div>
+        </article>
+    </main>
+
+    <footer class="pt-4 my-md-5 pt-md-3 border-top">
+            <div class="col-6 col-md">
+                <h5>データ</h5>
+                <p><a href="https://www.data.jma.go.jp/stats/etrn/index.php" target="_blank" class="link-light">気象庁|過去のデータ検索</a></p>
+            </div>
+            <div>
+                <h5>GitHubリポジトリ</h5>
+                <a href="#" target="_blank" class="link-light"></a>
+            </div>
+    </footer>
+</div>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+    <html lang="ja">
+        <head>
+            <meta charset="utf-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>{{ title }}</title>
+            <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+            <style>
+                #loading{
+                    background: rgba(0, 0, 0, 0.5);
+                    z-index: 10000;
+                }
+                body {
+                    background-color: #486d46;            /* 背景色 */
+                    background-image: url("../static/images/lake.jpg"); /* 画像 */
+                    background-size: cover;               /* 全画面 */
+                    background-attachment: fixed;         /* 固定 */
+                    background-position: center center;   /* 縦横中央 */
+                 }
+            </style>
+        </head>
+        <body>
+        {% block content %}
+        <!--ここに部品としてのHTMLを入れることになります-->
+        {% endblock %}
+        <script src="../static/js/bootstrap.bundle.min.js"></script>
+        </body>
+    </html>

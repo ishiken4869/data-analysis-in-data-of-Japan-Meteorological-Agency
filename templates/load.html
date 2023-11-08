@@ -1,0 +1,34 @@
+<!--extendsの部分は、base.htmlをベースにテンプレートを組み立てるおまじないです-->
+{% extends "base.html" %}
+{% block content %}
+
+<div class="m-4">
+
+    <header>
+        <h1>{{ title }}</h1>
+        <p>選択した地方・年・月</p>
+    </header>
+
+    <main>
+        <article>
+            <div class="containeer-fluid">
+                <label>地方</label>
+                {{ region }}
+                <label>年</label>
+                {{ year }}
+                <label>月</label>
+                {{ month }}
+
+                <button type="button" class="btn btn-primary" disabled>
+                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                    <span role="status">Loading...</span>
+                </button>
+
+            </div>
+
+        </article>
+    </main>
+
+</div>
+
+{% endblock %}
