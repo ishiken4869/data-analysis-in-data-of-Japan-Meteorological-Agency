@@ -295,3 +295,24 @@ def slice_list(region):
         return shikoku_list
     if region == "九州":
         return kyushu_list
+
+
+def make_csv(place):
+
+    df_list = []
+    dt_now = datetime.datetime.now()
+
+    for year in range(1970, dt_now.year):
+        for month in range(1, 13):
+            df = make_df(place, year, month)
+            df_list.append(df)
+
+    year = dt_now.year
+
+    for month in range(1, dt_now.month+1):
+        df = make_df(place, year, month)
+        df_list.append(df)
+
+    df_concat_multi = pd.concat(df_list)
+    df_concat_multi.reset_index(drop=True).to_csv('/Users/ishiikenta/Library/CloudStorage/Dropbox/Mac/Desktop/気象庁HPデータ/data_' + place + '.csv', 
+                                                index=False)
