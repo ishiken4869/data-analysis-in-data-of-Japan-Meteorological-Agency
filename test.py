@@ -55,7 +55,7 @@ def make_df(place, year, month):
     base_url = "http://www.data.jma.go.jp/obd/stats/etrn/view/daily_s1.php?prec_no=%s&block_no=%s&year=%s&month=%s&day=1&view=p1"
 
     #最終的にデータを集めるリスト
-    All_list = [['年月日', '降水量', '気温_平均', '気温_最高', '気温_最低', '湿度_平均', '湿度_最小', '日照時間']]
+    All_list = [['年月日', '気圧_現地', '気圧_海面', '降水量', '気温_平均', '気温_最高', '気温_最低', '湿度_平均', '湿度_最小', '平均風速', '最大風速', '最大瞬間風速', '日照時間']]
     #print(place)
     index = place_name.index(place)
 
