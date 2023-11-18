@@ -101,21 +101,42 @@ def make_df(place, year, month):
 
     return df
 
+
 def test(place, year, month):
     period = 30
     df_list = []
     print(place)
     print(year-period+1)
 
-    for i in range(period):
-        new_df = make_df(place, year-period+1+i, month)
-        df_list.append(new_df)
+    path = '/Users/ishiikenta/Library/CloudStorage/Dropbox/Mac/Desktop/気象庁HPデータ/data_' + place + '.csv'
+    is_file = os.path.isfile(path)
+
+    if is_file:
+        print(add_data(place))
+        df = pd.read_csv(path)
+        df['年月日'] = pd.to_datetime(df['年月日'])
+
+        for y in range(year-period+1, year+1):
+            df_tmp = df[(df['年月日'] >= datetime.datetime(y,1,1)) & (df['年月日'] <= datetime.datetime(y,12,31))]
+            df_list.append(df_tmp)
+
+        df_v = pd.concat(df_list[:-1], axis=0)
+
+
+    else:
+        for i in range(period):
+            new_df = make_df(place, year-period+1+i, month)
+            df_list.append(new_df)
+
+            df_concat_multi = pd.concat(df_list)
+            df_concat_multi.reset_index(drop=True).to_csv('/Users/ishiikenta/Library/CloudStorage/Dropbox/Mac/Desktop/気象庁HPデータ/data_' + place + '.csv', 
+                                                        index=False)
+        df_v = pd.concat(df_list[:-1], axis=0)
+
 
     print(year)
 
-    df_v = pd.concat(df_list[:-1], axis=0)
-
-    #print("0:有意差なし、1:平均気温が高い、-1:平均気温が低い")
+    print("0:有意差なし、1:平均気温が高い、-1:平均気温が低い")
 
     #yearで指定した年の平均気温データの正規性判定
     static_year, pvalue_year = stats.shapiro(df_list[-1]["気温_平均"])
@@ -167,6 +188,7 @@ def test(place, year, month):
                 if pvalue < 0.05:
                     return -1
 
+
     #正規分布を仮定できない
     else:
         #正規分布を仮定できない為
@@ -187,6 +209,7 @@ def test(place, year, month):
             #平均気温が小さい場合、-1を返す
             if pvalue < 0.05:
                 return -1
+
 
 def make_result(region, place_list, year, month):
     result_list = [2] * 47
