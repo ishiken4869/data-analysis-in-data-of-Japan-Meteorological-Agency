@@ -316,3 +316,85 @@ def make_csv(place):
     df_concat_multi = pd.concat(df_list)
     df_concat_multi.reset_index(drop=True).to_csv('/Users/ishiikenta/Library/CloudStorage/Dropbox/Mac/Desktop/気象庁HPデータ/data_' + place + '.csv', 
                                                 index=False)
+
+
+def add_data(place):
+    df = pd.read_csv('/Users/ishiikenta/Library/CloudStorage/Dropbox/Mac/Desktop/気象庁HPデータ/data_' + place + '.csv')
+
+    # 全ての要素の値が0の行はまだデータがない
+    # index_listにデータのない行のindexを集める
+    index_list = []
+    #df_len = len(df.loc[:, df.columns[1:-1]])
+    df_len = len(df)
+
+    for i in range(df_len):
+
+        if (df.loc[:, df.columns[1:-1]].iloc[-1-i] == 0).all() == True:
+            index_list.append(df.loc[:, df.columns[0:1]].iloc[-1-i].name)
+
+        # データのある行が見つかったら中断
+        else:
+            break
+
+    index_list_reverse = []
+    for i in range(len(index_list)):
+        index_list_reverse.append(index_list[-1-i])
+
+    index_list = index_list_reverse
+
+    """
+            if (df.loc[:, df.columns[1:-1]][i:i+1] == 0).all().sum() == len(df.columns[1:-1]):
+                index_list.append(i)
+    """
+
+    # index_listが空の時
+    if len(index_list) == 0:
+        index_list.append(df['年月日'].iloc[-1])
+
+    year_s = pd.to_datetime(df.iloc[index_list]['年月日']).iloc[0].year
+    month_s = pd.to_datetime(df.iloc[index_list]['年月日']).iloc[0].month
+    day_s = pd.to_datetime(df.iloc[index_list]['年月日']).iloc[0].day
+
+    year_g = dt_now.year
+    month_g = dt_now.month
+    day_g = dt_now.day
+
+    # 最新の状態になっているなら実行終了
+    if year_s==year_g and month_s==month_g and day_s==day_g:
+        return
+
+    else:
+
+        df_list = []
+
+        for year in range(year_s, year_g+1):
+            # 前回更新時と年が一致する時
+            if year_s == year_g:
+                for month in range(month_s, month_g+1):
+                    df_tmp = make_df(place, year, month)
+                    df_list.append(df_tmp)
+
+            elif year == year_s:
+                for month in range(month_s, 13):
+                    df_tmp = make_df(place, year, month)
+                    df_list.append(df_tmp)
+
+            elif year == year_g:
+                for month in range(1, month_g+1):
+                    df_tmp = make_df(place, year, month)
+                    df_list.append(df_tmp)
+
+            else:
+                for month in range(1, 13):
+                    df_tmp = make_df(place, year, month)
+                    df_list.append(df_tmp)
+
+        df_add = pd.concat(df_list)
+        #df_add = pd.DataFrame(df_list, columns=df_list)
+        df = pd.concat([df[:index_list[0]], df_add[day_s-1:]])
+        df['年月日'] = pd.to_datetime(df['年月日'])
+
+        df.reset_index(drop=True).to_csv('/Users/ishiikenta/Library/CloudStorage/Dropbox/Mac/Desktop/気象庁HPデータ/data_' + place + '.csv',
+                                                    index=False)
+
+        return df
