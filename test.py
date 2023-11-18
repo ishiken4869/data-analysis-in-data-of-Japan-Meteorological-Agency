@@ -1,6 +1,7 @@
 import sys
 #import geopandas as gpd
 import requests
+import numpy as np
 import flask
 from bs4 import BeautifulSoup #ダウンロードしてなかったらpipでできるからやってね。
 import csv
