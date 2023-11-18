@@ -1,4 +1,5 @@
 import sys
+import os
 #import geopandas as gpd
 import requests
 import numpy as np
@@ -378,6 +379,7 @@ def add_data(place):
     month_s = pd.to_datetime(df.iloc[index_list]['年月日']).iloc[0].month
     day_s = pd.to_datetime(df.iloc[index_list]['年月日']).iloc[0].day
 
+    dt_now = datetime.datetime.now()
     year_g = dt_now.year
     month_g = dt_now.month
     day_g = dt_now.day
