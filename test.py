@@ -356,6 +356,9 @@ def add_data(place):
         if (df.loc[:, df.columns[1:-1]].iloc[-1-i] == 0).all() == True:
             index_list.append(df.loc[:, df.columns[0:1]].iloc[-1-i].name)
 
+        elif df.loc[:, df.columns[1:-1]].iloc[-1-i].isnull().any() == True:
+            index_list.append(df.loc[:, df.columns[0:1]].iloc[-1-i].name)
+
         # データのある行が見つかったら中断
         else:
             break
