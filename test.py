@@ -134,7 +134,7 @@ def test(place, year, month):
     is_file = os.path.isfile(path)
 
     if is_file:
-        print(add_data(place))
+        add_data(place)
         df = pd.read_csv(path)
         df['年月日'] = pd.to_datetime(df['年月日'])
 
@@ -447,3 +447,28 @@ def add_data(place):
                                                     index=False)
 
         return df
+
+
+def sync_sheet(place):
+
+    i = 0
+    dict_pref = {}
+
+    for place in place_list:
+        dict_pref[place] = pref_names[i+1]
+        i += 1
+
+    gc = gspread.oauth()
+
+    pref = dict_pref[place]
+
+    sh = gc.open("data_" + pref)
+    df_local = pd.read_csv('/Users/ishiikenta/Library/CloudStorage/Dropbox/Mac/Desktop/気象庁HPデータ/data_' + place + '.csv')
+    #worksheet = sh.add_worksheet(title=pref, rows=100, cols=20)
+    worksheet = sh.sheet1
+    #worksheet.update(str(index_list[0]+2) + ':' + str(index_list[-1]+2), df.iloc[index_list].values.tolist())
+    df_sheet = pd.DataFrame(worksheet.get_all_records())
+
+    index_list = df_local[(df_local == df_sheet).all(axis=1) == False].index
+
+    worksheet.update(str(index_list[0]+2) + ':' + str(index_list[-1]+2), df.iloc[index_list].values.tolist())
