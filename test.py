@@ -1,6 +1,8 @@
 import sys
 import os
 #import geopandas as gpd
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 import requests
 import numpy as np
 import flask
@@ -15,6 +17,7 @@ import matplotlib.dates as mdates
 import statistics
 import math
 from scipy import stats
+from japanmap import pref_names
 import warnings
 import matplotlib.patches as mpatches
 matplotlib.use('agg')
@@ -81,13 +84,31 @@ def make_df(place, year, month):
 
         #１行の中には様々なデータがあるので全部取り出す。
         rowData = [] #初期化
+        #年月日
         rowData.append(str(year) + "/" + str(month) + "/" + str(data[0].string))
+        #気圧_現地
+        rowData.append(str2float(data[1].string))
+        #気圧_海面
+        rowData.append(str2float(data[2].string))
+        #降水量
         rowData.append(str2float(data[3].string))
+        #気温_平均
         rowData.append(str2float(data[6].string))
+        #気温_最高
         rowData.append(str2float(data[7].string))
+        #気温_最低
         rowData.append(str2float(data[8].string))
+        #湿度_平均
         rowData.append(str2float(data[9].string))
+        #湿度_最小
         rowData.append(str2float(data[10].string))
+        #平均風速
+        rowData.append(str2float(data[11].string))
+        #最大風速
+        rowData.append(str2float(data[12].string))
+        #最大瞬間風速
+        rowData.append(str2float(data[14].string))
+        #日照時間
         rowData.append(str2float(data[16].string))
 
         #天気概況を取りたかったが、前半のコードを変更する必要があるためいったん取得しない
@@ -130,7 +151,7 @@ def test(place, year, month):
             df_list.append(new_df)
 
             df_concat_multi = pd.concat(df_list)
-            df_concat_multi.reset_index(drop=True).to_csv('/Users/ishiikenta/Library/CloudStorage/Dropbox/Mac/Desktop/気象庁HPデータ/data_' + place + '.csv', 
+            df_concat_multi.reset_index(drop=True).to_csv('/Users/ishiikenta/Library/CloudStorage/Dropbox/Mac/Desktop/気象庁HPデータ/data_' + place + '.csv',
                                                         index=False)
         df_v = pd.concat(df_list[:-1], axis=0)
 
