@@ -492,4 +492,5 @@ def sync_sheet(place):
 
     index_list = df_local[(df_local == df_sheet).all(axis=1) == False].index
 
-    worksheet.update(str(index_list[0]+2) + ':' + str(index_list[-1]+2), df_local.iloc[index_list].values.tolist())
+    if len(index_list) != 0:
+        worksheet.update(str(index_list[0]+2) + ':' + str(index_list[-1]+2), df_local.iloc[index_list].values.tolist())
